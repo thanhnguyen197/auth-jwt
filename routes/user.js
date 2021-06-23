@@ -1,6 +1,5 @@
 // libraries
 const router = require('express').Router();
-const passport = require('passport');
 
 // models
 const User = require('@models/user');
@@ -9,7 +8,8 @@ const User = require('@models/user');
 const {
     genPassword, 
     validPassword, 
-    issueJWT
+    issueJWT,
+    authMiddleware
 } = require('@lib/utils');
 
 /**
@@ -96,10 +96,10 @@ router.post('/login', (req, res, next) => {
 
 
 /**
- * -------------- POST ROUTES ----------------
+ * -------------- PRIVATE ROUTES ----------------
  */
 
-router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+router.get('/protected', authMiddleware, (req, res, next) => {
     res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
 });
 
